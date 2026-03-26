@@ -42,7 +42,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node --env-file=.env.development.local dist/app.js"
+    "start": "node dist/app.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
