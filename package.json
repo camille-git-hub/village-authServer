@@ -1,7 +1,7 @@
 {
   "name": "express-ts-template",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "app.js",
   "type": "module",
   "imports": {
     "#controllers": {
