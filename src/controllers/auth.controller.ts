@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express';
-import { ACCESS_JWT_SECRET, REFRESH_TOKEN_TTL, SALT_ROUNDS } from '#config';
+import { JWT_SECRET, REFRESH_TOKEN_TTL, SALT_ROUNDS } from '#config';
 
 export const register: RequestHandler = async (req, res) => {
   // TODO: Implement user registration

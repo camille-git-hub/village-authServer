@@ -11,7 +11,7 @@ const port = process.env.PORT || '3000';
 
 app.use(
   cors({
-    origin: CLIENT_BASE_URL, // for use with credentials, origin(s) need to be specified
+    origin: 'https://village-frontend-tkh1.onrender.com/', // for use with credentials, origin(s) need to be specified
     credentials: true, // sends and receives secure cookies
     exposedHeaders: ['WWW-Authenticate'] // needed to send the 'refresh trigger''
   })

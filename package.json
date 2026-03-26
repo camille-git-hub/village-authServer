@@ -38,7 +38,7 @@
     }
   },
   "scripts": {
-    "dev": "tsx --watch --conditions development --experimental-transform-types --disable-warning=ExperimentalWarning --env-file=.env.development.local src/app.ts",
+    "dev": "node --watch --conditions development --experimental-transform-types --disable-warning=ExperimentalWarning --env-file=.env.development.local dist/app.js",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run build",
