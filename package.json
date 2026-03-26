@@ -38,7 +38,7 @@
     }
   },
   "scripts": {
-    "dev": "node --watch --conditions development --experimental-transform-types --disable-warning=ExperimentalWarning --env-file=.env.development.local src/app.ts",
+    "dev": "node --watch --conditions development --experimental-transform-types --disable-warning=ExperimentalWarning --env-file=.env src/app.ts",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run build",
@@ -50,7 +50,9 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.16.5"
+    "mongoose": "^8.16.5",
+    "dotenv": "17.3.1"
+
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

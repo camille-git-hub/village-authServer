@@ -1,10 +1,9 @@
-import '#db';
+import "dotenv/config";
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { authRoutes } from '#routes';
 // import { errorHandler, notFoundHandler } from '#middleware';
-import { CLIENT_BASE_URL } from '#config';
 
 const app = express();
 const port = process.env.PORT || '3000';
