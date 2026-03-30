@@ -1,12 +1,31 @@
 import { Schema, model } from 'mongoose';
 import { REFRESH_TOKEN_TTL } from '#config';
 
+export type RefreshToken = {
+  _id: string;
+  token: string;
+  userId: string;
+  expiresAt: Date;
+  createdAt: Date;
+};  
+
 const refreshTokenSchema = new Schema(
   {
-    // TODO: create a mongoose schema for storing refresh tokens
-    // this should include at least the token itself and expireAt
-    // expireAt: https://mongoosejs.com/docs/api/schemadateoptions.html#SchemaDateOptions.prototype.expires
-    // You could also store additional information like the userId or device info in more elaborate cases
+    token: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    expiresAt: {
+      type: Date,
+      required: true,
+      index: { expires: REFRESH_TOKEN_TTL / 1000 }
+    }
   },
   {
     timestamps: { createdAt: true, updatedAt: false }

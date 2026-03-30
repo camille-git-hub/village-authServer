@@ -1,1 +1,0 @@
-/* For custom types used in more than one module */

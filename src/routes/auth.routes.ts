@@ -1,11 +1,13 @@
 import { Router } from 'express';
+import User from '#models/User';
+import { registerSchema } from '#schemas';
 import { login, logout, me, refresh, register } from '#controllers';
+import { authMiddleware } from '#middleware';
 // import { validateBodyZod } from '#middleware';
-import { loginSchema, registerSchema } from '#schemas'; // TODO: use the schemas for validation
 
 const authRoutes = Router();
 
-authRoutes.post('/register', register);
+authRoutes.post('/register', authMiddleware, register);
 
 authRoutes.post('/login', login);
 
