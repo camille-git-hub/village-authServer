@@ -4,7 +4,7 @@ import { z } from 'zod/v4';
 const envSchema = z.object({
   MONGO_URI: z.url({ protocol: /mongodb/ }),
   DB_NAME: z.string(),
-  PORT: z.coerce.number().int().default(4000),
+  PORT: z.coerce.number().int().default(5000),
   REFRESH_TOKEN_TTL: z.coerce.number().default(30 * 24 * 60 * 60), // 30 days in seconds
   SALT_ROUNDS: z.coerce.number().default(13),
   JWT_SECRET: z.string().min(32),

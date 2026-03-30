@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import User from '#models/User';
+import User from '../models/User.ts';
 import { registerSchema } from '#schemas';
-import { login, logout, me, refresh, register } from '#controllers';
+import { login, logout, profile, refresh, register } from '#controllers';
 import { authMiddleware } from '#middleware';
 // import { validateBodyZod } from '#middleware';
 
@@ -15,6 +15,6 @@ authRoutes.post('/refresh', refresh);
 
 authRoutes.delete('/logout', logout);
 
-authRoutes.get('/me', me);
+authRoutes.get('/me', profile);
 
 export default authRoutes;

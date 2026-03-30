@@ -3,7 +3,7 @@
 // - errorHandler.ts
 // - validateBodyZod.ts
 
-import User from "#models/User";
+import User from '../models/User.ts';
 import { registerSchema } from "#schemas";
 import type { RequestHandler } from "express";
 
