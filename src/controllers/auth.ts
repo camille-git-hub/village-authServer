@@ -20,7 +20,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const found = await User.exists({ email });
     if (found)
-      throw new Error("user already exist", { cause: { status: 409 } });
+      throw new Error("user already exists", { cause: { status: 409 } });
 
     const hash = await bcrypt.hash(password, 12);
 
@@ -33,7 +33,9 @@ export const register: RequestHandler = async (req, res, next) => {
     });
 
     const refreshToken = crypto.randomUUID();
-    await RefreshToken.create({ token: refreshToken, userId: user._id });
+    const expiresAt = new Date(Date.now() + parseInt(process.env.REFRESH_TOKEN_TTL || '2592000000')); // Default to 30 days if not set
+
+    await RefreshToken.create({ token: refreshToken, userId: user._id, expiresAt });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -79,7 +81,9 @@ export const login: RequestHandler = async (req, res, next) => {
     await RefreshToken.deleteMany({ userId: user._id });
 
     const refreshToken = crypto.randomUUID();
-    await RefreshToken.create({ token: refreshToken, userId: user._id });
+
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    await RefreshToken.create({ token: refreshToken, userId: user._id, expiresAt });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
