@@ -4,8 +4,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { authRoutes } from '#routes';
 import { usersRoutes } from "#routes";
+import { errorHandler, notFoundHandler } from '#middleware';
 import './db/index.ts';
-import { errorHandler, notFoundHandler } from '#middleware'
 
 const app = express();
 const port = process.env.PORT || '4000';
@@ -13,18 +13,18 @@ const port = process.env.PORT || '4000';
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true, // sends and receives secure cookies
-    exposedHeaders: ['WWW-Authenticate'] // needed to send the 'refresh trigger''
+    credentials: true,
+    exposedHeaders: ['WWW-Authenticate']
   })
 );
 
 app.use(express.json(), cookieParser());
 
 app.use('/auth', authRoutes);
-
 app.use('/users', usersRoutes);
 
-app.use('*splat', notFoundHandler);
+// Error handling (MUST be last)
+app.use('/*splat', notFoundHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {

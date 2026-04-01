@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import User from '../models/User.ts';
-import { registerSchema } from '#schemas';
 import { login, logout, profile, refresh, register } from '#controllers';
 import verifyToken from '../middleware/verifyToken.ts';
 

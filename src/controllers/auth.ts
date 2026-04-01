@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/RefreshToken.ts";
+import { JWT_SECRET, SALT_ROUNDS, REFRESH_TOKEN_TTL } from "#config";
 
 declare global {
   namespace Express {
@@ -23,33 +24,33 @@ export const register: RequestHandler = async (req, res, next) => {
     if (found)
       throw new Error("user already exists", { cause: { status: 409 } });
 
-    const hash = await bcrypt.hash(password, 12);
+    const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
     const user = await User.create({ email, password: hash, firstName, lastName });
 
     const payload = { email: user.email, id: user._id };
 
-    const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
+    const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: "8h",
     });
 
     const refreshToken = crypto.randomUUID();
-    const expiresAt = new Date(Date.now() + parseInt(process.env.REFRESH_TOKEN_TTL || '2592000000')); // Default to 30 days if not set
+    const expiresAt = new Date(Date.now() + REFRESH_TOKEN_TTL || '2592000000'); // Default to 30 days if not set
 
     await RefreshToken.create({ token: refreshToken, userId: user._id, expiresAt });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
 
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 8 * 60 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     res.status(201).json({ msg: "Sucessfully registered" });
@@ -100,7 +101,7 @@ export const login: RequestHandler = async (req, res, next) => {
       maxAge: 8 * 60 * 60 * 1000,
     });
 
-    res.status(201).json({ msg: "Sucessfully loggedin" });
+    res.status(200).json({ msg: "Sucessfully loggedin" });
   } catch (error) {
     next(error);
   }
