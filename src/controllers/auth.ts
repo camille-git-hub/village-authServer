@@ -1,13 +1,14 @@
 import { User } from "../models/index.ts";
 import { type RequestHandler, type Request } from "express";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/RefreshToken.ts";
 
 declare global {
   namespace Express {
     interface Request {
-      user: { id: string };
+      user: { id: string; email: string };
     }
   }
 }
