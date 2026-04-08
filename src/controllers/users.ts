@@ -23,8 +23,8 @@ export const createUser: RequestHandler = async (req, res) => {
 
 export const getUser: RequestHandler = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
+    const { _id } = req.params;
+    const user = await User.findById(_id);
     res.json(user);
   } catch (error) {
     console.log(error);
@@ -35,10 +35,10 @@ export const getUser: RequestHandler = async (req, res) => {
 export const updateUser: RequestHandler = async (req, res) => {
   try {
     const {
-      params: { id },
+      params: { _id },
     } = req;
 
-    const user = await User.findByIdAndUpdate(id, req.body, { new: true });
+    const user = await User.findByIdAndUpdate(_id, req.body, { new: true });
     res.json(user);
   } catch (error) {
     console.log(error);
@@ -48,8 +48,8 @@ export const updateUser: RequestHandler = async (req, res) => {
 
 export const deleteUser: RequestHandler = async (req, res) => {
   try {
-    const { id } = req.params;
-    await User.findByIdAndDelete(id);
+    const { _id } = req.params;
+    await User.findByIdAndDelete(_id);
     res.status(204).end();
   } catch (error) {
     console.log(error);

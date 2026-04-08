@@ -9,7 +9,7 @@ import { JWT_SECRET, SALT_ROUNDS, REFRESH_TOKEN_TTL } from "#config";
 declare global {
   namespace Express {
     interface Request {
-      user: { id: string; email: string };
+      user: { _id: string; email: string };
     }
   }
 }
@@ -74,7 +74,7 @@ export const login: RequestHandler = async (req, res, next) => {
     if (!match)
       throw new Error("Invalid credintial", { cause: { status: 401 } });
 
-    const payload = { email: user.email, id: user._id };
+    const payload = { email: user.email, _id: user._id };
 
     const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
       expiresIn: "8h",
@@ -129,7 +129,7 @@ export const refresh: RequestHandler = async (req, res, next) => {
 
     await RefreshToken.create({ token: newRefreshToken, userId: user._id });
 
-    const payload = { email: user.email, id: user._id };
+    const payload = { email: user.email, _id: user._id };
 
     const newAccessToken = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
       expiresIn: "8h",
@@ -173,7 +173,7 @@ export const logout: RequestHandler = async (req, res, next) => {
 
 export const profile: RequestHandler = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id);
 
     res.json(user);
   } catch (error) {
