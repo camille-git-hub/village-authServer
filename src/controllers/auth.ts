@@ -5,6 +5,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/RefreshToken.ts";
 import { JWT_SECRET, SALT_ROUNDS, REFRESH_TOKEN_TTL } from "#config";
+import { access } from "fs";
 
 declare global {
   namespace Express {
@@ -53,7 +54,7 @@ export const register: RequestHandler = async (req, res, next) => {
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(201).json({ msg: "Sucessfully registered" });
+    res.status(201).json({ msg: "Sucessfully registered", accessToken: token, token: token});
   } catch (error) {
     next(error);
   }
@@ -101,7 +102,7 @@ export const login: RequestHandler = async (req, res, next) => {
       maxAge: 8 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ msg: "Sucessfully loggedin" });
+    res.status(200).json({ msg: "Sucessfully loggedin", accessToken: token, token: token });
   } catch (error) {
     next(error);
   }
@@ -149,7 +150,7 @@ export const refresh: RequestHandler = async (req, res, next) => {
       maxAge: 8 * 60 * 60 * 1000,
     });
 
-    res.json(newAccessToken);
+    res.json({ accessToken: newAccessToken, token: newAccessToken });
   } catch (error) {
     next(error);
   }
