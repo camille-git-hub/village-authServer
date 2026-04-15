@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import type { RequestHandler } from 'express';
-import { access } from 'fs';
 
 export const verifyToken: RequestHandler = (req, res, next) => {
     const secret = process.env.JWT_SECRET || 'your-secret-key';

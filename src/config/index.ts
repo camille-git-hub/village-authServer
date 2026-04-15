@@ -9,7 +9,7 @@ const envSchema = z.object({
   SALT_ROUNDS: z.coerce.number().default(13),
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRY: z.string().default('15m'),
-  CORS_ORIGIN: z.string().default('http://localhost:5173'),
+  CORS_ORIGIN: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
