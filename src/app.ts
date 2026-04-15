@@ -22,6 +22,9 @@ app.use(express.json(), cookieParser());
 
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 // Error handling (MUST be last)
 app.use('/*splat', notFoundHandler);
