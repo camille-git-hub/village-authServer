@@ -59,44 +59,91 @@ export const deleteUser: RequestHandler = async (req, res) => {
 
 export const getSavedListings: RequestHandler = async (req, res, next) => {
     try {
-        const { _id } = req.params;
+        const { userId } = req.params;
+
+        console.log(`Fetching saved listings for user ${userId}`);
         
-        const user = await User.findById(_id).populate('savedListings');
+        if (!userId) {
+            res.status(400).json({ message: "Missing userId" });
+            return;
+        }
+        
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        console.log(`[getSavedListings] found ${user.savedListings?.length || 0} saved listings for user ${userId}`);
         res.status(200).json({ data: user?.savedListings || [] });
     } catch (error) {
-        next(error);
-    }
-};
-
-export const removeSavedListing: RequestHandler = async (req, res, next) => {
-    try {
-        const { _id, listingId } = req.params;
-        
-        await User.findByIdAndUpdate(
-            _id,
-            { $pull: { savedListings: listingId } },
-            { new: true }
-        );
-        
-        res.status(200).json({ message: "Listing removed from user" });
-    } catch (error) {
+      console.error('Error in getSavedListings:', error);
         next(error);
     }
 };
 
 export const addSavedListing: RequestHandler = async (req, res, next) => {
     try {
-        const { _id } = req.params;
+        const { userId } = req.params;  
         const { listingId } = req.body;
         
-        await User.findByIdAndUpdate(
-            _id,
+        console.log(`Adding listing ${listingId} to user ${userId}`);
+        
+        if (!userId || !listingId) {
+            res.status(400).json({ 
+                message: "Missing userId or listingId",
+                userId,
+                listingId
+            });
+            return;
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,  
             { $addToSet: { savedListings: listingId } },
             { new: true }
         );
         
-        res.status(200).json({ message: "Listing saved to user" });
+        if (!updatedUser) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+        
+        res.status(200).json({ message: "Listing saved to user", data: updatedUser.savedListings });
     } catch (error) {
+        console.error('Error in addSavedListing:', error);
+        next(error);
+    }
+};
+
+export const removeSavedListing: RequestHandler = async (req, res, next) => {
+    try {
+        const { userId } = req.params;  
+        const {listingId} = req.body;
+        
+        console.log(`Removing listing ${listingId} from user ${userId}`);
+        
+        if (!userId || !listingId) {
+            res.status(400).json({ 
+                message: "Missing userId or listingId" 
+            });
+            return;
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, 
+            { $pull: { savedListings: listingId } },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+        
+        res.status(200).json({ message: "Listing removed from user", data: updatedUser.savedListings });
+    } catch (error) {
+        console.error('Error in removeSavedListing:', error);
         next(error);
     }
 };
