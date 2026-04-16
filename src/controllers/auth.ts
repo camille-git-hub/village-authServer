@@ -1,11 +1,10 @@
 import { User } from "../models/index.ts";
-import { type RequestHandler, type Request } from "express";
+import { type RequestHandler } from "express";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/RefreshToken.ts";
 import { JWT_SECRET, SALT_ROUNDS, REFRESH_TOKEN_TTL } from "#config";
-import { access } from "fs";
 
 declare global {
   namespace Express {
