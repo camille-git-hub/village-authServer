@@ -10,6 +10,7 @@ export type User = {
   roles: string[];
   createdAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
+  savedListings?: string[]; 
 };
 
 const userSchema = new Schema(
@@ -42,7 +43,11 @@ const userSchema = new Schema(
       enum: ['user', 'admin'],
       default: ['user'],
       required: false
-  }
+    },
+    savedListings: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Listing'
+    }]
 },
 {
     timestamps: { createdAt: true, updatedAt: false }

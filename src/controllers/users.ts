@@ -56,3 +56,47 @@ export const deleteUser: RequestHandler = async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 };
+
+export const getSavedListings: RequestHandler = async (req, res, next) => {
+    try {
+        const { _id } = req.params;
+        
+        const user = await User.findById(_id).populate('savedListings');
+        res.status(200).json({ data: user?.savedListings || [] });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const removeSavedListing: RequestHandler = async (req, res, next) => {
+    try {
+        const { _id, listingId } = req.params;
+        
+        await User.findByIdAndUpdate(
+            _id,
+            { $pull: { savedListings: listingId } },
+            { new: true }
+        );
+        
+        res.status(200).json({ message: "Listing removed from user" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addSavedListing: RequestHandler = async (req, res, next) => {
+    try {
+        const { _id } = req.params;
+        const { listingId } = req.body;
+        
+        await User.findByIdAndUpdate(
+            _id,
+            { $addToSet: { savedListings: listingId } },
+            { new: true }
+        );
+        
+        res.status(200).json({ message: "Listing saved to user" });
+    } catch (error) {
+        next(error);
+    }
+};
