@@ -2,8 +2,7 @@ import "dotenv/config";
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRoutes } from '#routes';
-import { usersRoutes } from "#routes";
+import { authRoutes, usersRoutes, networkRoutes } from '#routes';
 import { errorHandler, notFoundHandler } from '#middleware';
 import './db/index.ts';
 
@@ -22,6 +21,8 @@ app.use(express.json(), cookieParser());
 
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
+app.use('/network', networkRoutes);
+
 app.get('/health', (req, res) => {
   res.status(200).json({ status: "ok" });
 });

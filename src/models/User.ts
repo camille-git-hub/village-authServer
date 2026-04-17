@@ -10,7 +10,12 @@ export type User = {
   roles: string[];
   createdAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
-  savedListings?: string[]; 
+  savedListings?: string[];
+  network: {
+    connections: string[];
+    receivedRequests: string[];
+    sentRequests: string[];
+  };
 };
 
 const userSchema = new Schema(
@@ -47,7 +52,21 @@ const userSchema = new Schema(
     savedListings: [{
       type: Schema.Types.ObjectId,
       ref: 'Listing'
-    }]
+    }],
+    network: {
+      connections: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }],
+      receivedRequests: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }],
+      sentRequests: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }]
+    }
 },
 {
     timestamps: { createdAt: true, updatedAt: false }
