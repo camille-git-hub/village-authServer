@@ -67,12 +67,12 @@ export const login: RequestHandler = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user)
-      throw new Error("Invalid credintial", { cause: { status: 401 } });
+      throw new Error("Invalid credentials", { cause: { status: 401 } });
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match)
-      throw new Error("Invalid credintial", { cause: { status: 401 } });
+      throw new Error("Invalid credentials", { cause: { status: 401 } });
 
     const payload = { email: user.email, _id: user._id };
 
