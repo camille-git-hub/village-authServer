@@ -74,7 +74,6 @@ export const getSavedListings: RequestHandler = async (req, res, next) => {
             return;
         }
 
-        console.log(`[getSavedListings] found ${user.savedListings?.length || 0} saved listings for user ${userId}`);
         res.status(200).json({ data: user?.savedListings || [] });
     } catch (error) {
       console.error('Error in getSavedListings:', error);
@@ -86,9 +85,7 @@ export const addSavedListing: RequestHandler = async (req, res, next) => {
     try {
         const { userId } = req.params;  
         const { listingId } = req.body;
-        
-        console.log(`Adding listing ${listingId} to user ${userId}`);
-        
+                
         if (!userId || !listingId) {
             res.status(400).json({ 
                 message: "Missing userId or listingId",
@@ -121,7 +118,6 @@ export const removeSavedListing: RequestHandler = async (req, res, next) => {
         const { userId } = req.params;  
         const {listingId} = req.body;
         
-        console.log(`Removing listing ${listingId} from user ${userId}`);
         
         if (!userId || !listingId) {
             res.status(400).json({ 
