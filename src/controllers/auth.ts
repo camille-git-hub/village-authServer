@@ -158,7 +158,6 @@ export const refresh: RequestHandler = async (req, res, next) => {
 export const logout: RequestHandler = async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
-    console.log(refreshToken);
 
     await RefreshToken.deleteOne({ token: refreshToken });
 
